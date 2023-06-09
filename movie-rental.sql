@@ -1,25 +1,24 @@
--- usuniecie bazy danych jesli istnieje
-DROP DATABASE IF EXISTS wypozyczalnia_filmow;
+-- make sure database can be created
+DROP DATABASE IF EXISTS movie_rental;
 
--- utworzenie bazy danych
-CREATE DATABASE wypozyczalnia_filmow;
-USE wypozyczalnia_filmow;
-
+-- create db and set language
+CREATE DATABASE movie_rental;
+USE movie_rental;
 SET NAMES utf8;
 SET character_set_client = utf8;
 
--- utworzenie tabel i wypelnienie wartosciami
-CREATE TABLE klienci (
-    id_klienta INT(11) NOT NULL AUTO_INCREMENT,
-    imie VARCHAR(50) NOT NULL,
-    nazwisko VARCHAR(50) NOT NULL,
-    adres VARCHAR(100) NOT NULL,
-    miasto VARCHAR(100) NOT NULL,
-    telefon VARCHAR(9) NOT NULL CHECK (LENGTH(telefon) = 9),
-    PRIMARY KEY (id_klienta),
-    CONSTRAINT unikalny_telefon UNIQUE (telefon)
+-- create tables and fill them with data
+CREATE TABLE clients (
+    client_id INT(11) NOT NULL AUTO_INCREMENT,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    address VARCHAR(100) NOT NULL,
+    city VARCHAR(100) NOT NULL,
+    phone VARCHAR(9) NOT NULL CHECK (LENGTH(phone) = 9),
+    PRIMARY KEY (client_id),
+    CONSTRAINT unique_phone UNIQUE (phone)
 );
-INSERT INTO klienci (imie, nazwisko, adres, miasto, telefon)
+INSERT INTO clients (first_name, last_name, address, city, phone)
 VALUES
     ('Jan', 'Kowalski', 'ul. Bukietowa 1', 'Torun', '123456789'),
     ('Marian', 'Marianowski', 'ul. Lotna 1', 'Lodz', '565656565'),
@@ -27,50 +26,50 @@ VALUES
     ('Jaroslaw', 'Gesiowski', 'ul. Farysa 99', 'Warszawa', '678678678'),
     ('Wladyslaw', 'Warnenczyk', 'ul. Wenecka 4', 'Poznan', '123123123'),
     ('Adam', 'Szczurowski', 'ul. Korporacyjna 4', 'Wroclaw', '234234234'),
-    ('Krzysztof', 'Kononowicz', 'ul. Szkolna 17', 'Bialystok', '745745745'),
+    ('Krzysztof', 'Kononowiczowski', 'ul. Szkolna 117', 'Bialystok', '745745745'),
     ('Joanna', 'Nowak', 'ul. Nowa 2', 'Krakow', '987654321'),
     ('Abraham', 'Linkoln', 'ul. Amerykanska 2', 'Warszawa', '345634568');
 
-CREATE TABLE filmy (
-    id_filmu INT(11) NOT NULL AUTO_INCREMENT,
-    tytul VARCHAR(100) NOT NULL,
-    gatunek VARCHAR(50) NOT NULL,
-    rezyser VARCHAR(50) NOT NULL,
-    rok_produkcji INT(4) NOT NULL,
-	cena DECIMAL(10,2) NOT NULL DEFAULT 0,
-    PRIMARY KEY (id_filmu)
+CREATE TABLE movies (
+    movie_id INT(11) NOT NULL AUTO_INCREMENT,
+    title VARCHAR(100) NOT NULL,
+    genre VARCHAR(50) NOT NULL,
+    director VARCHAR(50) NOT NULL,
+    release_year INT(4) NOT NULL,
+	price DECIMAL(10,2) NOT NULL DEFAULT 0,
+    PRIMARY KEY (movie_id)
 );
-INSERT INTO filmy (tytul, gatunek, rezyser, rok_produkcji, cena)
+INSERT INTO movies (title, genre, director, release_year, price)
 VALUES
-    ('Incepcja', 'Sci-Fi', 'Christopher Nolan', 2010, DEFAULT),
-    ('Siedem', 'Thriller', 'David Fincher', 1995, 14.0),
-    ('Skazani na Shawshank', 'Dramat', 'Frank Darabont', 1994, 35.5),
-    ('Krol Lew', 'Animowany', 'Rob Minkoff, Roger Allers', 1994, 24.0),
-    ('Pulp fiction', 'Kryminalny', 'Quentin Tarantino', 1994, 18.0),
-    ('Forrest Gump', 'Komediodramat', 'Robert Zemeckis', 1994, 17.0),
-    ('Leon zawodowiec', 'Dramat', 'Luc Besson', 1994, 12.5),
-    ('Braveheart Waleczne Serce', 'Dramat', 'Mel Gibson', 1995, 13.5),
-    ('Goraczka', 'Sensacyjny', 'Michael Mann', 1995, 15.0),
-    ('Bekarty wojny', 'Wojenny', 'Quentin Tarantino', 2009, 18.5),
-    ('Django', 'Western', 'Quentin Tarantino', 2012, 19.5),
-    ('Pewnego razu w Hollywood', 'Dramat, kryminal', 'Quentin Tarantino', 2019, 22.5),
+    ('Inception', 'Sci-Fi', 'Christopher Nolan', 2010, DEFAULT),
+    ('Se7en', 'Thriller', 'David Fincher', 1995, 14.0),
+    ('Shawshank Redemption', 'Tragedy', 'Frank Darabont', 1994, 35.5),
+    ('The Lion King', 'Animated', 'Rob Minkoff, Roger Allers', 1994, 24.0),
+    ('Pulp fiction', 'Crime film', 'Quentin Tarantino', 1994, 18.0),
+    ('Forrest Gump', 'Comedy Drama', 'Robert Zemeckis', 1994, 17.0),
+    ('Leon', 'Tragedy', 'Luc Besson', 1994, 12.5),
+    ('Braveheart', 'Tragedy', 'Mel Gibson', 1995, 13.5),
+    ('Heat', 'Sensacyjny', 'Michael Mann', 1995, 15.0),
+    ('Inglorious Bastards', 'War film', 'Quentin Tarantino', 2009, 18.5),
+    ('Django Unchained', 'Western', 'Quentin Tarantino', 2012, 19.5),
+    ('Once Upon a Time... in Hollywood', 'Tragedy, Crime film', 'Quentin Tarantino', 2019, 22.5),
     ('Avatar', 'Sci-Fi', 'James Cameron', 2009, 20.5),
-    ('Avatar: Istota Wody', 'Sci-Fi', 'James Cameron', 2022, 34.5),
-    ('Shrek', 'Animowany', 'Andrew Adamson, Vicky Jenson', 2001, 15.0),
+    ('Avatar: The Way of Water', 'Sci-Fi', 'James Cameron', 2022, 34.5),
+    ('Shrek', 'Animated', 'Andrew Adamson, Vicky Jenson', 2001, 15.0),
     ('Avengers', 'Sci-Fun', 'Joss Whedon', 2012, 10.0),
     ('Iron Man', 'Sci-Fun', 'Jon Favreau', 2008, 12.0);
 
-CREATE TABLE wypozyczenia (
-    id_wypozyczenia INT(11) NOT NULL AUTO_INCREMENT,
-    id_klienta INT(11) NOT NULL,
-    id_filmu INT(11) NOT NULL,
-    data_wypozyczenia DATE NOT NULL,
-    data_zwrotu DATE DEFAULT NULL,
-    PRIMARY KEY (id_wypozyczenia),
-    FOREIGN KEY (id_klienta) REFERENCES klienci(id_klienta),
-    FOREIGN KEY (id_filmu) REFERENCES filmy(id_filmu)
+CREATE TABLE rentals (
+    rental_id INT(11) NOT NULL AUTO_INCREMENT,
+    client_id INT(11) NOT NULL,
+    movie_id INT(11) NOT NULL,
+    rental_date DATE NOT NULL,
+    return_date DATE DEFAULT NULL,
+    PRIMARY KEY (rental_id),
+    FOREIGN KEY (client_id) REFERENCES clients(client_id),
+    FOREIGN KEY (movie_id) REFERENCES movies(movie_id)
 );
-INSERT INTO wypozyczenia (id_klienta, id_filmu, data_wypozyczenia, data_zwrotu)
+INSERT INTO rentals (client_id, movie_id, rental_date, return_date)
 VALUES
     (1, 1, '2023-05-01', DEFAULT),
     (2, 2, '2023-04-12', '2023-04-26'),
@@ -89,14 +88,14 @@ VALUES
 	(9, 5, '2023-06-01', DEFAULT),
     (9, 8, '2023-05-31', DEFAULT);
 
-CREATE TABLE platnosci (
-  id_platnosci INT(11) NOT NULL AUTO_INCREMENT,
-  id_wypozyczenia INT(11) NOT NULL,
-  kwota DECIMAL(10,2) NOT NULL,
-  PRIMARY KEY (id_platnosci),
-  FOREIGN KEY (id_wypozyczenia) REFERENCES wypozyczenia(id_wypozyczenia)
+CREATE TABLE payments (
+  payment_id INT(11) NOT NULL AUTO_INCREMENT,
+  rental_id INT(11) NOT NULL,
+  amount DECIMAL(10,2) NOT NULL,
+  PRIMARY KEY (payment_id),
+  FOREIGN KEY (rental_id) REFERENCES rentals(rental_id)
 );
-INSERT INTO platnosci (id_wypozyczenia, kwota)
+INSERT INTO payments (rental_id, amount)
 VALUES
     (2, 14.00),
     (3, 14.00),
@@ -108,202 +107,202 @@ VALUES
     (13, 12.00),
     (14, 10.00);
 
--- utworzenie indeksow
-CREATE INDEX idx_klienci_imie ON klienci(imie);
-CREATE INDEX idx_filmy_tytul ON filmy(tytul);
-CREATE INDEX idx_wypozyczenia_data_wyp ON wypozyczenia(data_wypozyczenia);
+-- creating indexes
+CREATE INDEX idx_clients_first_name ON clients(first_name);
+CREATE INDEX idx_movies_title ON movies(title);
+CREATE INDEX idx_rentals_rental_date ON rentals(rental_date);
 
--- utworzenie procedur 
+-- procedures
 -- 1)
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE dodaj_klienta(
-    IN p_imie VARCHAR(50),
-    IN p_nazwisko VARCHAR(50),
-    IN p_adres VARCHAR(100),
-    IN p_miasto VARCHAR(100),
-    IN p_telefon VARCHAR(9)
+CREATE DEFINER=`root`@`localhost` PROCEDURE add_client(
+    IN p_first_name VARCHAR(50),
+    IN p_last_name VARCHAR(50),
+    IN p_address VARCHAR(100),
+    IN p_city VARCHAR(100),
+    IN p_phone VARCHAR(9)
 )
 BEGIN
-    INSERT INTO klienci (imie, nazwisko, adres, miasto, telefon)
-    VALUES (p_imie, p_nazwisko, p_adres, p_miasto, p_telefon);
+    INSERT INTO clients (first_name, last_name, address, city, phone)
+    VALUES (p_first_name, p_last_name, p_address, p_city, p_phone);
 END $$
 DELIMITER ;
 
 -- 2)
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE usun_klienta(IN p_id_klienta INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE delete_client(IN p_client_id INT)
 BEGIN
-    -- sprawdzenie, czy klient posiada wypozyczenia z nieoddanymi filmami
+    -- check for not returned movies
     IF EXISTS (
         SELECT 1
-        FROM wypozyczenia
-        WHERE id_klienta = p_id_klienta AND data_zwrotu IS NULL
+        FROM rentals
+        WHERE client_id = p_client_id AND return_date IS NULL
         LIMIT 1
     ) THEN
         SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = 'Klient posiada niezwrócone filmy. Nie można usunąć klienta.';
+            SET MESSAGE_TEXT = 'Client has movies that havent been returned.';
     ELSE
-        -- usuniecie rekordow wypozyczen
-        DELETE FROM wypozyczenia WHERE id_klienta = p_id_klienta;
+        -- delete history of rentals
+        DELETE FROM rentals WHERE client_id = p_client_id;
         
-        -- usuniecie klienta
-        DELETE FROM klienci WHERE id_klienta = p_id_klienta;
+        -- delete client
+        DELETE FROM clients WHERE client_id = p_client_id;
     END IF;
 END $$
 DELIMITER ;
 
 -- 3)
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE wyswietl_szczegolu_filmu(IN film_id INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE display_movie_details(IN p_movie_id INT)
 BEGIN
-    SELECT f.tytul, f.gatunek, f.rezyser, f.rok_produkcji, COUNT(w.id_wypozyczenia) AS liczba_wypozyczen
-    FROM filmy AS f
-    LEFT JOIN wypozyczenia AS w ON f.id_filmu = w.id_filmu
-    WHERE f.id_filmu = film_id
-    GROUP BY f.id_filmu;
+    SELECT m.title, m.genre, m.director, m.release_year, COUNT(w.rental_id) AS rental_count
+    FROM movies m
+    LEFT JOIN rentals r ON m.movie_id = r.movie_id
+    WHERE m.movie_id = p_movie_id
+    GROUP BY m.movie_id;
 END $$
 DELIMITER ;
 
 -- 4)
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE wyswietl_historie_wypozyczonych_filmow_klienta(IN klient_id INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE client_rental_history(IN p_client_id INT)
 BEGIN
-    SELECT k.imie, k.nazwisko, f.tytul, w.data_wypozyczenia, COALESCE(w.data_zwrotu, 'nie zostal zwrocony') AS data_zwrotu
-    FROM klienci AS k
-    JOIN wypozyczenia AS w ON k.id_klienta = w.id_klienta
-    JOIN filmy AS f ON w.id_filmu = f.id_filmu
-    WHERE k.id_klienta = klient_id;
+    SELECT c.first_name, c.last_name, m.title, r.rental_date, COALESCE(w.return_date, 'not returned') AS return_date
+    FROM clients c
+    JOIN rentals r ON c.client_id = r.client_id
+    JOIN movies m ON r.movie_id = m.movie_id
+    WHERE c.client_id = p_client_id;
 END $$
 DELIMITER ;
 
 -- utworzenie wyzwalaczy
 -- 1)
 DELIMITER $$
-CREATE TRIGGER `dodaj_date_zwrotu` BEFORE UPDATE ON `wypozyczenia`
+CREATE TRIGGER `set_return_date` BEFORE UPDATE ON `rentals`
  FOR EACH ROW BEGIN
-    DECLARE cena_kopia DECIMAL(10, 2);
-    DECLARE odsetki DECIMAL(10, 2);
-    DECLARE roznica_dni INT;
+    DECLARE price_copy DECIMAL(10, 2);
+    DECLARE interest DECIMAL(10, 2);
+    DECLARE days INT;
     
-    SELECT f.cena INTO cena_kopia
-    FROM filmy f
-    WHERE f.id_filmu = NEW.id_filmu;
+    SELECT m.price INTO price_copy
+    FROM movies m
+    WHERE m.movie_id = NEW.movie_id;
 
-    IF NEW.data_zwrotu < NEW.data_wypozyczenia THEN
+    IF NEW.return_date < NEW.rental_date THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Data zwrotu nie moze byc wczesniejsza niz data wypozyczenia.';
+        SET MESSAGE_TEXT = 'Rental date is not before return date';
     END IF;
     
-    SET roznica_dni = DATEDIFF(NEW.data_zwrotu, NEW.data_wypozyczenia);
-    SET odsetki = roznica_dni * 0.1;
+    SET days = DATEDIFF(NEW.return_date, NEW.rental_date);
+    SET interest = days * 0.1;
     
    -- dodaj platnosc
-    IF roznica_dni > 3 THEN
-    	INSERT INTO platnosci (id_wypozyczenia, kwota)
-		VALUES (NEW.id_wypozyczenia, cena_kopia + odsetki);
+    IF days > 3 THEN
+    	INSERT INTO payments (rental_id, amount)
+		VALUES (NEW.rental_id, price_copy + interest);
 	ELSE
-    	INSERT INTO platnosci (id_wypozyczenia, kwota)
-		VALUES (NEW.id_wypozyczenia, cena_kopia);
+    	INSERT INTO payments (rental_id, amount)
+		VALUES (NEW.rental_id, price_copy);
     END IF;
 END $$
 DELIMITER ;
 
 -- 2)
 DELIMITER $$
-CREATE TRIGGER `sprawdz_date_zwrotu` BEFORE INSERT ON `wypozyczenia`
+CREATE TRIGGER `check_return_date` BEFORE INSERT ON `rentals`
  FOR EACH ROW BEGIN
-    IF NEW.data_zwrotu IS NOT NULL THEN
+    IF NEW.return_date IS NOT NULL THEN
         SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = 'Nie mozna wypozyczyc filmu i od razu go zwrocic.';
+            SET MESSAGE_TEXT = 'Movie cannot be returned at the rental date';
     END IF;
 END $$
 DELIMITER ;
 
 -- 3)
 DELIMITER $$
-CREATE TRIGGER `sprawdz_numer_telefonu` BEFORE INSERT ON `klienci`
+CREATE TRIGGER `check_phone_number` BEFORE INSERT ON `clients`
  FOR EACH ROW BEGIN
-    IF EXISTS (SELECT * FROM klienci WHERE telefon = NEW.telefon AND id_klienta != NEW.id_klienta) THEN
+    IF EXISTS (SELECT * FROM clients WHERE phone = NEW.phone AND client_id != NEW.client_id) THEN
         SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = 'Istnieje juz klient o takim samym numerze telefonu.';
+            SET MESSAGE_TEXT = 'There is another client using the same phone number';
     END IF;
 END $$
 DELIMITER ;
 
--- zapytania laczace minimum 3 tabele
--- 1) WHERE - wypisz wszystkie wypozyczenia dokonane przez klientow z Warszawy
-SELECT CONCAT(k.imie, ' ', k.nazwisko) AS klient, f.tytul, w.data_wypozyczenia
-FROM klienci k
-JOIN wypozyczenia w USING (id_klienta)
-JOIN filmy f USING (id_filmu)
-WHERE k.miasto = 'Warszawa';
+-- various queries
+-- 1) WHERE - list all rentals that clients from Warsaw has made
+SELECT CONCAT(c.first_name, ' ', c.last_name) AS client, m.title, r.rental_date
+FROM clients c
+JOIN rentals r USING (client_id)
+JOIN movies m USING (movie_id)
+WHERE c.city = 'Warszawa';
 
--- 2) NATURAL JOIN - wypisz wypozyczenia wszystkich klientow wraz z kwotami
-SELECT CONCAT(k.imie, ' ', k.nazwisko) AS klient, w.data_wypozyczenia, p.kwota
-FROM klienci k
-NATURAL JOIN wypozyczenia w
-NATURAL JOIN platnosci p;
+-- 2) NATURAL JOIN - list all rentals of clients with corresponding amounts 
+SELECT CONCAT(c.first_name, ' ', c.last_name) AS client, r.rental_date, p.amount
+FROM clients c
+NATURAL JOIN rentals r
+NATURAL JOIN payments p;
 
--- 3) INNER JOIN - wypisz wszystkie wypozyczenia dramatow, ktore sa wypozyczone
-SELECT CONCAT(k.imie, ' ', k.nazwisko) AS klient, f.tytul, f.gatunek, w.data_zwrotu
-FROM klienci k
-INNER JOIN wypozyczenia w USING (id_klienta)
-INNER JOIN filmy f USING (id_filmu)
-WHERE f.gatunek = 'Dramat' AND w.data_zwrotu IS NULL;
+-- 3) INNER JOIN - list all tragedy film that are not returned
+SELECT CONCAT(c.first_name, ' ', c.last_name) AS client, m.title, m.genre, r.return_date
+FROM clients c
+INNER JOIN rentals r USING (client_id)
+INNER JOIN movies m USING (movie_id)
+WHERE m.genre = 'Tragedy' AND r.return_date IS NULL;
 
--- 4) LEFT OUTER JOIN - wypisz wszystkie wypozyczenia filmow Tarantino wraz ze wszystkimi ich wypozyczajacymi i datami
-SELECT CONCAT(k.imie, ' ', k.nazwisko) AS klient, f.tytul, w.data_wypozyczenia
-FROM klienci k
-LEFT JOIN wypozyczenia w USING (id_klienta)
-LEFT JOIN filmy f USING (id_filmu)
-WHERE f.rezyser = 'Quentin Tarantino';
+-- 4) LEFT OUTER JOIN - list all rentals of Tarantino's movies
+SELECT CONCAT(c.first_name, ' ', c.last_name) AS client, m.title, r.rental_date
+FROM clients c
+LEFT JOIN rentals r USING (client_id)
+LEFT JOIN movies m USING (movie_id)
+WHERE m.director = 'Quentin Tarantino';
 
--- 5) RIGHT OUTER JOIN - wypisz wszystkie wypozyczenia wraz z klientami oraz klientow, ktorzy nie wypozyczyli niczego
-SELECT CONCAT(k.imie, ' ', k.nazwisko) AS klient, COALESCE(f.tytul, '-') AS tytul, COALESCE(p.kwota, 0) AS kwota
-FROM filmy f
-RIGHT JOIN wypozyczenia w USING (id_filmu)
-RIGHT JOIN platnosci p USING (id_wypozyczenia)
-RIGHT JOIN klienci k USING (id_klienta);
+-- 5) RIGHT OUTER JOIN - list all rentals as well as clients without any rentals
+SELECT CONCAT(c.first_name, ' ', c.last_name) AS client, COALESCE(m.title, '-') AS title, COALESCE(p.amount, 0) AS amount
+FROM movies m
+RIGHT JOIN rentals r USING (movie_id)
+RIGHT JOIN payments p USING (rental_id)
+RIGHT JOIN clients c USING (client_id);
 
--- zapytania wykorzystujace klauzule GROUP BY, HAVING, BETWEEN, LIKE, ORDER BY oraz funkcje SUM i COUNT
--- 1) Jakie sa gatunki filmow w bazie danych, ktore maja wiecej niz dwa filmy?
-SELECT f.gatunek, COUNT(*) AS liczba_filmow
-FROM filmy f
-GROUP BY f.gatunek
+-- various queries using GROUP BY, HAVING, BETWEEN, LIKE, ORDER BY and functions SUM, COUNT
+-- 1) Which genres has more than two rentals?
+SELECT m.genre, COUNT(*) AS movie_count
+FROM movies m
+GROUP BY m.genre
 HAVING COUNT(*) > 2
-ORDER BY liczba_filmow DESC;
+ORDER BY movie_count DESC;
 
--- 2) Ile razy w historii kazdy klient wypozyczyl film?
-SELECT CONCAT(imie, ' ', nazwisko) AS klient, COUNT(*) AS liczba_wypozyczen
-FROM klienci k
-JOIN wypozyczenia w USING(id_klienta)
-GROUP BY klient
-ORDER BY liczba_wypozyczen DESC;
+-- 2) How many times does each of the clients rented a movie?
+SELECT CONCAT(first_name, ' ', last_name) AS client, COUNT(*) AS rental_count
+FROM clients c
+JOIN rentals r USING(client_id)
+GROUP BY client
+ORDER BY rental_count DESC;
 
--- 3) Jak chronologicznie rozkladaja sie wypozyczenia filmow od poczatku 2023 roku?
-SELECT w.data_wypozyczenia, f.tytul, CONCAT(imie, ' ', nazwisko) AS klient
-FROM klienci k
-JOIN wypozyczenia w USING (id_klienta)
-JOIN filmy f USING (id_filmu)
-WHERE w.data_wypozyczenia BETWEEN '2023-01-01' AND CURRENT_DATE
-ORDER BY w.data_wypozyczenia ASC;
+-- 3) What is chronologic order of rentals in 2023?
+SELECT r.rental_date, m.title, CONCAT(first_name, ' ', last_name) AS client
+FROM clients c
+JOIN rentals r USING (client_id)
+JOIN movies m USING (movie_id)
+WHERE r.rental_date BETWEEN '2023-01-01' AND CURRENT_DATE
+ORDER BY r.rental_date ASC;
 
--- 4) Ile jest filmow z kazdego rocznika?
-SELECT rok_produkcji, COUNT(*) AS liczba_filmow
-FROM filmy
-GROUP BY rok_produkcji
-ORDER BY rok_produkcji ASC;
+-- 4) How many films of each release year are there?
+SELECT release_year, COUNT(*) AS movie_count
+FROM movies
+GROUP BY release_year
+ORDER BY release_year ASC;
 
--- 5) Ktory z gatunkow filmow wygenerowal najwiekszy zysk?
-SELECT f.gatunek, SUM(p.kwota) AS suma_przychodow
-FROM filmy f
-JOIN wypozyczenia w USING (id_filmu)
-JOIN platnosci p USING (id_wypozyczenia)
-GROUP BY f.gatunek
-ORDER BY suma_przychodow DESC;
+-- 5) Which genre made the most income?
+SELECT m.genre, SUM(p.amount) AS income_total
+FROM movies m
+JOIN rentals r USING (movie_id)
+JOIN payments p USING (rental_id)
+GROUP BY m.genre
+ORDER BY income_total DESC;
 
--- 6) Ile wypozyczono filmow w kazdym z lat dzialania wypozyczalni?
-SELECT YEAR(data_wypozyczenia) AS rok, COUNT(*) AS liczba_wypozyczen
-FROM wypozyczenia
-GROUP BY YEAR(data_wypozyczenia)
-ORDER BY rok ASC;
+-- 6) How many films where rented each year?
+SELECT YEAR(rental_date) AS year_rental, COUNT(*) AS rental_count
+FROM rentals
+GROUP BY YEAR(rental_date)
+ORDER BY year_rental ASC;
